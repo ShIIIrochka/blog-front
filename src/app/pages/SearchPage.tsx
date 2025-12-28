@@ -92,10 +92,6 @@ export function SearchPage() {
     }
   };
 
-  const handleLike = async (id: string) => {
-    // Like functionality not available in API
-    console.log('Like post:', id);
-  };
 
   const handleSave = async (postId: string) => {
     const isSaved = savedPosts.has(postId);
@@ -151,7 +147,6 @@ export function SearchPage() {
                 post={post}
                 author={authors.get(post.author_id)}
                 categories={categories}
-                onLike={handleLike}
                 isSaved={savedPosts.has(post.id)}
                 onSave={handleSave}
               />

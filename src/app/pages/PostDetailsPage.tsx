@@ -129,9 +129,6 @@ export function PostDetailsPage() {
     }
   };
 
-  const handleLike = async (id: string) => {
-    console.log('Like post:', id);
-  };
 
   const handleSave = async (postId: string) => {
     try {
@@ -205,7 +202,6 @@ export function PostDetailsPage() {
           post={post}
           author={author || undefined}
           categories={categories}
-          onLike={handleLike}
           isSaved={isSaved}
           onSave={handleSave}
         />
@@ -242,24 +238,54 @@ export function PostDetailsPage() {
           )}
 
           <div className="space-y-4">
-            {comments.map((comment) => {
-              const commentAuthor = commentAuthors.get(comment.author_id);
-              return (
-                <CommentItem
-                  key={comment.id}
-                  comment={comment}
-                  author={commentAuthor}
-                  currentUserId={user?.id}
-                  onUpdate={handleUpdateComment}
-                  onDelete={handleDeleteComment}
-                  onReply={handleReplyToComment}
-                />
-              );
-            })}
+            {(() => {
+              // Group comments by parent_comment_id
+              const commentMap = new Map<string, Comment[]>();
+              const rootComments: Comment[] = [];
 
-            {comments.length === 0 && (
-              <p className="text-gray-500 text-center py-8">Пока нет комментариев</p>
-            )}
+              comments.forEach((comment) => {
+                if (!comment.parent_comment_id) {
+                  rootComments.push(comment);
+                } else {
+                  if (!commentMap.has(comment.parent_comment_id)) {
+                    commentMap.set(comment.parent_comment_id, []);
+                  }
+                  commentMap.get(comment.parent_comment_id)!.push(comment);
+                }
+              });
+
+              const renderComment = (comment: Comment, depth = 0) => {
+                const commentAuthor = commentAuthors.get(comment.author_id);
+                const replies = commentMap.get(comment.id) || [];
+
+                return (
+                  <div key={comment.id} className={depth > 0 ? 'ml-8 mt-3' : ''}>
+                    <CommentItem
+                      comment={comment}
+                      author={commentAuthor}
+                      currentUserId={user?.id}
+                      onUpdate={handleUpdateComment}
+                      onDelete={handleDeleteComment}
+                      onReply={handleReplyToComment}
+                    />
+                    {replies.length > 0 && (
+                      <div className="mt-3 space-y-3">
+                        {replies.map((reply) => renderComment(reply, depth + 1))}
+                      </div>
+                    )}
+                  </div>
+                );
+              };
+
+              return (
+                <>
+                  {rootComments.map((comment) => renderComment(comment))}
+                  {rootComments.length === 0 && (
+                    <p className="text-gray-500 text-center py-8">Пока нет комментариев</p>
+                  )}
+                </>
+              );
+            })()}
           </div>
         </div>
       </main>

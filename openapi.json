@@ -1,0 +1,2176 @@
+{
+  "info": { "title": "Blog API", "version": "1.0.0" },
+  "openapi": "3.1.0",
+  "servers": [{ "url": "/" }],
+  "paths": {
+    "/users/delete": {
+      "delete": {
+        "tags": ["Users"],
+        "summary": "DeleteUser",
+        "operationId": "UsersDeleteDeleteUser",
+        "responses": {
+          "204": {
+            "description": "Request fulfilled, nothing follows",
+            "headers": {
+              "Set-Cookie": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "description": "",
+                      "example": "token=\"<string>\"; Path=/; SameSite=lax"
+                    }
+                  ]
+                },
+                "required": false,
+                "deprecated": false
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [{ "BearerAuth": [] }]
+      }
+    },
+    "/users/follow/{user_id}": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "FollowUser",
+        "operationId": "UsersFollowUserIdFollowUser",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "schema": { "type": "string", "format": "uuid" },
+            "required": true,
+            "deprecated": false
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Request fulfilled, nothing follows",
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad request syntax or unsupported method",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status_code": { "type": "integer" },
+                    "detail": { "type": "string" },
+                    "extra": {
+                      "additionalProperties": {},
+                      "type": ["null", "object", "array"]
+                    }
+                  },
+                  "type": "object",
+                  "required": ["detail", "status_code"],
+                  "description": "Validation Exception",
+                  "examples": [
+                    { "status_code": 400, "detail": "Bad Request", "extra": {} }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [{ "BearerAuth": [] }, { "BearerAuth": [] }]
+      }
+    },
+    "/users/feed": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "GetFeed",
+        "operationId": "UsersFeedGetFeed",
+        "parameters": [
+          {
+            "name": "cursor",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                { "type": "string", "format": "uuid" },
+                { "type": "null" }
+              ],
+              "description": "Cursor for pagination"
+            },
+            "description": "Cursor for pagination",
+            "required": false,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "allowReserved": false
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "maximum": 100.0,
+              "minimum": 1.0,
+              "description": "Number of posts per page",
+              "default": 10
+            },
+            "description": "Number of posts per page",
+            "required": false,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "allowReserved": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request fulfilled, document follows",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetFeedPageResponseBody"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request syntax or unsupported method",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status_code": { "type": "integer" },
+                    "detail": { "type": "string" },
+                    "extra": {
+                      "additionalProperties": {},
+                      "type": ["null", "object", "array"]
+                    }
+                  },
+                  "type": "object",
+                  "required": ["detail", "status_code"],
+                  "description": "Validation Exception",
+                  "examples": [
+                    { "status_code": 400, "detail": "Bad Request", "extra": {} }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [{ "BearerAuth": [] }]
+      }
+    },
+    "/users/categories/liked": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "GetLikedCategories",
+        "operationId": "UsersCategoriesLikedGetLikedCategories",
+        "responses": {
+          "200": {
+            "description": "Request fulfilled, document follows",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": { "type": "string", "format": "uuid" },
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [{ "BearerAuth": [] }]
+      }
+    },
+    "/users/me": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "GetMe",
+        "operationId": "UsersMeGetMe",
+        "responses": {
+          "200": {
+            "description": "Request fulfilled, document follows",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMeUserResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [{ "BearerAuth": [] }]
+      }
+    },
+    "/users/personalized-feed": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "GetPersonalizedFeed",
+        "operationId": "UsersPersonalizedFeedGetPersonalizedFeed",
+        "parameters": [
+          {
+            "name": "cursor",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                { "type": "string", "format": "uuid" },
+                { "type": "null" }
+              ],
+              "description": "Cursor for pagination"
+            },
+            "description": "Cursor for pagination",
+            "required": false,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "allowReserved": false
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "maximum": 100.0,
+              "minimum": 1.0,
+              "description": "Number of posts per page",
+              "default": 10
+            },
+            "description": "Number of posts per page",
+            "required": false,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "allowReserved": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request fulfilled, document follows",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetPersonalizedFeedPageResponseBody"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request syntax or unsupported method",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status_code": { "type": "integer" },
+                    "detail": { "type": "string" },
+                    "extra": {
+                      "additionalProperties": {},
+                      "type": ["null", "object", "array"]
+                    }
+                  },
+                  "type": "object",
+                  "required": ["detail", "status_code"],
+                  "description": "Validation Exception",
+                  "examples": [
+                    { "status_code": 400, "detail": "Bad Request", "extra": {} }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [{ "BearerAuth": [] }]
+      }
+    },
+    "/users/posts/saved": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "GetSavedPosts",
+        "operationId": "UsersPostsSavedGetSavedPosts",
+        "responses": {
+          "200": {
+            "description": "Request fulfilled, document follows",
+            "headers": {},
+            "content": {
+              "application/json": { "schema": { "items": {}, "type": "array" } }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [{ "BearerAuth": [] }]
+      }
+    },
+    "/users/{user_id}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "GetUserById",
+        "operationId": "UsersUserIdGetUserById",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "schema": { "type": "string", "format": "uuid" },
+            "required": true,
+            "deprecated": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request fulfilled, document follows",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUserByIdUserResponseBody"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request syntax or unsupported method",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status_code": { "type": "integer" },
+                    "detail": { "type": "string" },
+                    "extra": {
+                      "additionalProperties": {},
+                      "type": ["null", "object", "array"]
+                    }
+                  },
+                  "type": "object",
+                  "required": ["detail", "status_code"],
+                  "description": "Validation Exception",
+                  "examples": [
+                    { "status_code": 400, "detail": "Bad Request", "extra": {} }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [{ "BearerAuth": [] }]
+      }
+    },
+    "/users/categories/like/{category_id}": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "LikeCategory",
+        "operationId": "UsersCategoriesLikeCategoryIdLikeCategory",
+        "parameters": [
+          {
+            "name": "category_id",
+            "in": "path",
+            "schema": { "type": "string", "format": "uuid" },
+            "required": true,
+            "deprecated": false
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Request fulfilled, nothing follows",
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad request syntax or unsupported method",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status_code": { "type": "integer" },
+                    "detail": { "type": "string" },
+                    "extra": {
+                      "additionalProperties": {},
+                      "type": ["null", "object", "array"]
+                    }
+                  },
+                  "type": "object",
+                  "required": ["detail", "status_code"],
+                  "description": "Validation Exception",
+                  "examples": [
+                    { "status_code": 400, "detail": "Bad Request", "extra": {} }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [{ "BearerAuth": [] }, { "BearerAuth": [] }]
+      }
+    },
+    "/users/posts/save/{post_id}": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "SavePost",
+        "operationId": "UsersPostsSavePostIdSavePost",
+        "parameters": [
+          {
+            "name": "post_id",
+            "in": "path",
+            "schema": { "type": "string", "format": "uuid" },
+            "required": true,
+            "deprecated": false
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Request fulfilled, nothing follows",
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad request syntax or unsupported method",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status_code": { "type": "integer" },
+                    "detail": { "type": "string" },
+                    "extra": {
+                      "additionalProperties": {},
+                      "type": ["null", "object", "array"]
+                    }
+                  },
+                  "type": "object",
+                  "required": ["detail", "status_code"],
+                  "description": "Validation Exception",
+                  "examples": [
+                    { "status_code": 400, "detail": "Bad Request", "extra": {} }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [{ "BearerAuth": [] }, { "BearerAuth": [] }]
+      }
+    },
+    "/users/unfollow/{user_id}": {
+      "delete": {
+        "tags": ["Users"],
+        "summary": "UnfollowUser",
+        "operationId": "UsersUnfollowUserIdUnfollowUser",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "schema": { "type": "string", "format": "uuid" },
+            "required": true,
+            "deprecated": false
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Request fulfilled, nothing follows",
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad request syntax or unsupported method",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status_code": { "type": "integer" },
+                    "detail": { "type": "string" },
+                    "extra": {
+                      "additionalProperties": {},
+                      "type": ["null", "object", "array"]
+                    }
+                  },
+                  "type": "object",
+                  "required": ["detail", "status_code"],
+                  "description": "Validation Exception",
+                  "examples": [
+                    { "status_code": 400, "detail": "Bad Request", "extra": {} }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [{ "BearerAuth": [] }, { "BearerAuth": [] }]
+      }
+    },
+    "/users/categories/unlike/{category_id}": {
+      "delete": {
+        "tags": ["Users"],
+        "summary": "UnlikeCategory",
+        "operationId": "UsersCategoriesUnlikeCategoryIdUnlikeCategory",
+        "parameters": [
+          {
+            "name": "category_id",
+            "in": "path",
+            "schema": { "type": "string", "format": "uuid" },
+            "required": true,
+            "deprecated": false
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Request fulfilled, nothing follows",
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad request syntax or unsupported method",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status_code": { "type": "integer" },
+                    "detail": { "type": "string" },
+                    "extra": {
+                      "additionalProperties": {},
+                      "type": ["null", "object", "array"]
+                    }
+                  },
+                  "type": "object",
+                  "required": ["detail", "status_code"],
+                  "description": "Validation Exception",
+                  "examples": [
+                    { "status_code": 400, "detail": "Bad Request", "extra": {} }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [{ "BearerAuth": [] }, { "BearerAuth": [] }]
+      }
+    },
+    "/users/unsave-post/{post_id}": {
+      "delete": {
+        "tags": ["Users"],
+        "summary": "UnsavePost",
+        "operationId": "UsersUnsavePostPostIdUnsavePost",
+        "parameters": [
+          {
+            "name": "post_id",
+            "in": "path",
+            "schema": { "type": "string", "format": "uuid" },
+            "required": true,
+            "deprecated": false
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Request fulfilled, nothing follows",
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad request syntax or unsupported method",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status_code": { "type": "integer" },
+                    "detail": { "type": "string" },
+                    "extra": {
+                      "additionalProperties": {},
+                      "type": ["null", "object", "array"]
+                    }
+                  },
+                  "type": "object",
+                  "required": ["detail", "status_code"],
+                  "description": "Validation Exception",
+                  "examples": [
+                    { "status_code": 400, "detail": "Bad Request", "extra": {} }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [{ "BearerAuth": [] }, { "BearerAuth": [] }]
+      }
+    },
+    "/users/update": {
+      "put": {
+        "tags": ["Users"],
+        "summary": "UpdateUser",
+        "operationId": "UsersUpdateUpdateUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserUserRequestBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Request fulfilled, document follows",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateUserUserResponseBody"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request syntax or unsupported method",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status_code": { "type": "integer" },
+                    "detail": { "type": "string" },
+                    "extra": {
+                      "additionalProperties": {},
+                      "type": ["null", "object", "array"]
+                    }
+                  },
+                  "type": "object",
+                  "required": ["detail", "status_code"],
+                  "description": "Validation Exception",
+                  "examples": [
+                    { "status_code": 400, "detail": "Bad Request", "extra": {} }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [{ "BearerAuth": [] }]
+      }
+    },
+    "/user/auth/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Login",
+        "operationId": "UserAuthLoginLogin",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/LoginUserRequestBody" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Request fulfilled, document follows",
+            "headers": {},
+            "content": {
+              "": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginJWTResponseBody"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request syntax or unsupported method",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status_code": { "type": "integer" },
+                    "detail": { "type": "string" },
+                    "extra": {
+                      "additionalProperties": {},
+                      "type": ["null", "object", "array"]
+                    }
+                  },
+                  "type": "object",
+                  "required": ["detail", "status_code"],
+                  "description": "Validation Exception",
+                  "examples": [
+                    { "status_code": 400, "detail": "Bad Request", "extra": {} }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/user/auth/refresh": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Refresh",
+        "operationId": "UserAuthRefreshRefresh",
+        "responses": {
+          "200": {
+            "description": "Request fulfilled, document follows",
+            "headers": {},
+            "content": {
+              "": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefreshJWTResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/user/auth/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Register",
+        "operationId": "UserAuthRegisterRegister",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterUserRequestBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Document created, URL follows",
+            "headers": {},
+            "content": {
+              "": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterJWTResponseBody"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request syntax or unsupported method",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status_code": { "type": "integer" },
+                    "detail": { "type": "string" },
+                    "extra": {
+                      "additionalProperties": {},
+                      "type": ["null", "object", "array"]
+                    }
+                  },
+                  "type": "object",
+                  "required": ["detail", "status_code"],
+                  "description": "Validation Exception",
+                  "examples": [
+                    { "status_code": 400, "detail": "Bad Request", "extra": {} }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/posts/create": {
+      "post": {
+        "tags": ["Posts"],
+        "summary": "CreatePost",
+        "operationId": "PostsCreateCreatePost",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePostPostRequestBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Document created, URL follows",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreatePostPostResponseBody"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request syntax or unsupported method",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status_code": { "type": "integer" },
+                    "detail": { "type": "string" },
+                    "extra": {
+                      "additionalProperties": {},
+                      "type": ["null", "object", "array"]
+                    }
+                  },
+                  "type": "object",
+                  "required": ["detail", "status_code"],
+                  "description": "Validation Exception",
+                  "examples": [
+                    { "status_code": 400, "detail": "Bad Request", "extra": {} }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [{ "BearerAuth": [] }]
+      }
+    },
+    "/posts/{post_id}/delete": {
+      "delete": {
+        "tags": ["Posts"],
+        "summary": "DeletePost",
+        "operationId": "PostsPostIdDeleteDeletePost",
+        "parameters": [
+          {
+            "name": "post_id",
+            "in": "path",
+            "schema": { "type": "string", "format": "uuid" },
+            "required": true,
+            "deprecated": false
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Request fulfilled, nothing follows",
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad request syntax or unsupported method",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status_code": { "type": "integer" },
+                    "detail": { "type": "string" },
+                    "extra": {
+                      "additionalProperties": {},
+                      "type": ["null", "object", "array"]
+                    }
+                  },
+                  "type": "object",
+                  "required": ["detail", "status_code"],
+                  "description": "Validation Exception",
+                  "examples": [
+                    { "status_code": 400, "detail": "Bad Request", "extra": {} }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [{ "BearerAuth": [] }]
+      }
+    },
+    "/posts/{post_id}": {
+      "get": {
+        "tags": ["Posts"],
+        "summary": "GetPost",
+        "operationId": "PostsPostIdGetPost",
+        "parameters": [
+          {
+            "name": "post_id",
+            "in": "path",
+            "schema": { "type": "string", "format": "uuid" },
+            "required": true,
+            "deprecated": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request fulfilled, document follows",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetPostPostResponseBody"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request syntax or unsupported method",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status_code": { "type": "integer" },
+                    "detail": { "type": "string" },
+                    "extra": {
+                      "additionalProperties": {},
+                      "type": ["null", "object", "array"]
+                    }
+                  },
+                  "type": "object",
+                  "required": ["detail", "status_code"],
+                  "description": "Validation Exception",
+                  "examples": [
+                    { "status_code": 400, "detail": "Bad Request", "extra": {} }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [{ "BearerAuth": [] }]
+      }
+    },
+    "/posts": {
+      "get": {
+        "tags": ["Posts"],
+        "summary": "GetPosts",
+        "operationId": "PostsGetPosts",
+        "parameters": [
+          {
+            "name": "cursor",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                { "type": "string", "format": "uuid" },
+                { "type": "null" }
+              ],
+              "description": "Cursor for pagination"
+            },
+            "description": "Cursor for pagination",
+            "required": false,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "allowReserved": false
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "maximum": 102.0,
+              "minimum": 1.0,
+              "description": "Number of posts per page",
+              "default": 10
+            },
+            "description": "Number of posts per page",
+            "required": false,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "allowReserved": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request fulfilled, document follows",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetPostsPageResponseBody"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request syntax or unsupported method",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status_code": { "type": "integer" },
+                    "detail": { "type": "string" },
+                    "extra": {
+                      "additionalProperties": {},
+                      "type": ["null", "object", "array"]
+                    }
+                  },
+                  "type": "object",
+                  "required": ["detail", "status_code"],
+                  "description": "Validation Exception",
+                  "examples": [
+                    { "status_code": 400, "detail": "Bad Request", "extra": {} }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [{ "BearerAuth": [] }]
+      }
+    },
+    "/posts/user/{author_id}": {
+      "get": {
+        "tags": ["Posts"],
+        "summary": "GetPostsByAuthor",
+        "operationId": "PostsUserAuthorIdGetPostsByAuthor",
+        "parameters": [
+          {
+            "name": "author_id",
+            "in": "path",
+            "schema": { "type": "string", "format": "uuid" },
+            "required": true,
+            "deprecated": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request fulfilled, document follows",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/GetPostsByAuthorPostResponseBody"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request syntax or unsupported method",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status_code": { "type": "integer" },
+                    "detail": { "type": "string" },
+                    "extra": {
+                      "additionalProperties": {},
+                      "type": ["null", "object", "array"]
+                    }
+                  },
+                  "type": "object",
+                  "required": ["detail", "status_code"],
+                  "description": "Validation Exception",
+                  "examples": [
+                    { "status_code": 400, "detail": "Bad Request", "extra": {} }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [{ "BearerAuth": [] }]
+      }
+    },
+    "/posts/search": {
+      "get": {
+        "tags": ["Posts"],
+        "summary": "SearchPosts",
+        "operationId": "PostsSearchSearchPosts",
+        "parameters": [
+          {
+            "name": "search_query",
+            "in": "query",
+            "schema": { "type": "string", "description": "Search query" },
+            "description": "Search query",
+            "required": true,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "allowReserved": false
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "maximum": 100.0,
+              "minimum": 1.0,
+              "default": 10
+            },
+            "required": false,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "allowReserved": false
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": { "type": "integer", "minimum": 0.0, "default": 0 },
+            "required": false,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "allowReserved": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request fulfilled, document follows",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SearchPostsPostResponseBody"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request syntax or unsupported method",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status_code": { "type": "integer" },
+                    "detail": { "type": "string" },
+                    "extra": {
+                      "additionalProperties": {},
+                      "type": ["null", "object", "array"]
+                    }
+                  },
+                  "type": "object",
+                  "required": ["detail", "status_code"],
+                  "description": "Validation Exception",
+                  "examples": [
+                    { "status_code": 400, "detail": "Bad Request", "extra": {} }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [{ "BearerAuth": [] }]
+      }
+    },
+    "/posts/{post_id}/update": {
+      "put": {
+        "tags": ["Posts"],
+        "summary": "UpdatePost",
+        "operationId": "PostsPostIdUpdateUpdatePost",
+        "parameters": [
+          {
+            "name": "post_id",
+            "in": "path",
+            "schema": { "type": "string", "format": "uuid" },
+            "required": true,
+            "deprecated": false
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePostPostRequestBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Request fulfilled, document follows",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdatePostPostResponseBody"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request syntax or unsupported method",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status_code": { "type": "integer" },
+                    "detail": { "type": "string" },
+                    "extra": {
+                      "additionalProperties": {},
+                      "type": ["null", "object", "array"]
+                    }
+                  },
+                  "type": "object",
+                  "required": ["detail", "status_code"],
+                  "description": "Validation Exception",
+                  "examples": [
+                    { "status_code": 400, "detail": "Bad Request", "extra": {} }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [{ "BearerAuth": [] }]
+      }
+    },
+    "/categories/create": {
+      "post": {
+        "tags": ["Categories"],
+        "summary": "CreateCategory",
+        "operationId": "CategoriesCreateCreateCategory",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCategoryCategoryRequestBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Document created, URL follows",
+            "headers": {},
+            "content": { "application/json": { "schema": {} } }
+          },
+          "400": {
+            "description": "Bad request syntax or unsupported method",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status_code": { "type": "integer" },
+                    "detail": { "type": "string" },
+                    "extra": {
+                      "additionalProperties": {},
+                      "type": ["null", "object", "array"]
+                    }
+                  },
+                  "type": "object",
+                  "required": ["detail", "status_code"],
+                  "description": "Validation Exception",
+                  "examples": [
+                    { "status_code": 400, "detail": "Bad Request", "extra": {} }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [{ "BearerAuth": [] }]
+      }
+    },
+    "/categories": {
+      "get": {
+        "tags": ["Categories"],
+        "summary": "GetAllCategories",
+        "operationId": "CategoriesGetAllCategories",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": { "type": "integer", "default": 10 },
+            "required": false,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "allowReserved": false
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                { "type": "string", "format": "uuid" },
+                { "type": "null" }
+              ]
+            },
+            "required": false,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "allowReserved": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request fulfilled, document follows",
+            "headers": {},
+            "content": {
+              "application/json": { "schema": { "items": {}, "type": "array" } }
+            }
+          },
+          "400": {
+            "description": "Bad request syntax or unsupported method",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status_code": { "type": "integer" },
+                    "detail": { "type": "string" },
+                    "extra": {
+                      "additionalProperties": {},
+                      "type": ["null", "object", "array"]
+                    }
+                  },
+                  "type": "object",
+                  "required": ["detail", "status_code"],
+                  "description": "Validation Exception",
+                  "examples": [
+                    { "status_code": 400, "detail": "Bad Request", "extra": {} }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [{ "BearerAuth": [] }]
+      }
+    },
+    "/categories/{category_id}": {
+      "get": {
+        "tags": ["Categories"],
+        "summary": "GetCategoryById",
+        "operationId": "CategoriesCategoryIdGetCategoryById",
+        "parameters": [
+          {
+            "name": "category_id",
+            "in": "path",
+            "schema": { "type": "string", "format": "uuid" },
+            "required": true,
+            "deprecated": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request fulfilled, document follows",
+            "headers": {},
+            "content": { "application/json": { "schema": {} } }
+          },
+          "400": {
+            "description": "Bad request syntax or unsupported method",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status_code": { "type": "integer" },
+                    "detail": { "type": "string" },
+                    "extra": {
+                      "additionalProperties": {},
+                      "type": ["null", "object", "array"]
+                    }
+                  },
+                  "type": "object",
+                  "required": ["detail", "status_code"],
+                  "description": "Validation Exception",
+                  "examples": [
+                    { "status_code": 400, "detail": "Bad Request", "extra": {} }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [{ "BearerAuth": [] }]
+      }
+    },
+    "/comments/post/{post_id}": {
+      "get": {
+        "tags": ["Comments"],
+        "summary": "GetCommentsByPost",
+        "operationId": "CommentsPostPostIdGetCommentsByPost",
+        "parameters": [
+          {
+            "name": "post_id",
+            "in": "path",
+            "schema": { "type": "string", "format": "uuid" },
+            "required": true,
+            "deprecated": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request fulfilled, document follows",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/GetCommentsByPostCommentResponseBody"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request syntax or unsupported method",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status_code": { "type": "integer" },
+                    "detail": { "type": "string" },
+                    "extra": {
+                      "additionalProperties": {},
+                      "type": ["null", "object", "array"]
+                    }
+                  },
+                  "type": "object",
+                  "required": ["detail", "status_code"],
+                  "description": "Validation Exception",
+                  "examples": [
+                    { "status_code": 400, "detail": "Bad Request", "extra": {} }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [{ "BearerAuth": [] }]
+      },
+      "post": {
+        "tags": ["Comments"],
+        "summary": "CreateComment",
+        "operationId": "CommentsPostPostIdCreateComment",
+        "parameters": [
+          {
+            "name": "post_id",
+            "in": "path",
+            "schema": { "type": "string", "format": "uuid" },
+            "required": true,
+            "deprecated": false
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCommentCommentRequestBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Document created, URL follows",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateCommentCommentResponseBody"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request syntax or unsupported method",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status_code": { "type": "integer" },
+                    "detail": { "type": "string" },
+                    "extra": {
+                      "additionalProperties": {},
+                      "type": ["null", "object", "array"]
+                    }
+                  },
+                  "type": "object",
+                  "required": ["detail", "status_code"],
+                  "description": "Validation Exception",
+                  "examples": [
+                    { "status_code": 400, "detail": "Bad Request", "extra": {} }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [{ "BearerAuth": [] }]
+      }
+    },
+    "/comments/{comment_id}": {
+      "get": {
+        "tags": ["Comments"],
+        "summary": "GetComment",
+        "operationId": "CommentsCommentIdGetComment",
+        "parameters": [
+          {
+            "name": "comment_id",
+            "in": "path",
+            "schema": { "type": "string", "format": "uuid" },
+            "required": true,
+            "deprecated": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request fulfilled, document follows",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCommentCommentResponseBody"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request syntax or unsupported method",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status_code": { "type": "integer" },
+                    "detail": { "type": "string" },
+                    "extra": {
+                      "additionalProperties": {},
+                      "type": ["null", "object", "array"]
+                    }
+                  },
+                  "type": "object",
+                  "required": ["detail", "status_code"],
+                  "description": "Validation Exception",
+                  "examples": [
+                    { "status_code": 400, "detail": "Bad Request", "extra": {} }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [{ "BearerAuth": [] }]
+      },
+      "put": {
+        "tags": ["Comments"],
+        "summary": "UpdateComment",
+        "operationId": "CommentsCommentIdUpdateComment",
+        "parameters": [
+          {
+            "name": "comment_id",
+            "in": "path",
+            "schema": { "type": "string", "format": "uuid" },
+            "required": true,
+            "deprecated": false
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCommentCommentRequestBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Request fulfilled, document follows",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateCommentCommentResponseBody"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request syntax or unsupported method",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status_code": { "type": "integer" },
+                    "detail": { "type": "string" },
+                    "extra": {
+                      "additionalProperties": {},
+                      "type": ["null", "object", "array"]
+                    }
+                  },
+                  "type": "object",
+                  "required": ["detail", "status_code"],
+                  "description": "Validation Exception",
+                  "examples": [
+                    { "status_code": 400, "detail": "Bad Request", "extra": {} }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [{ "BearerAuth": [] }]
+      },
+      "delete": {
+        "tags": ["Comments"],
+        "summary": "DeleteComment",
+        "operationId": "CommentsCommentIdDeleteComment",
+        "parameters": [
+          {
+            "name": "comment_id",
+            "in": "path",
+            "schema": { "type": "string", "format": "uuid" },
+            "required": true,
+            "deprecated": false
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Request fulfilled, nothing follows",
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad request syntax or unsupported method",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status_code": { "type": "integer" },
+                    "detail": { "type": "string" },
+                    "extra": {
+                      "additionalProperties": {},
+                      "type": ["null", "object", "array"]
+                    }
+                  },
+                  "type": "object",
+                  "required": ["detail", "status_code"],
+                  "description": "Validation Exception",
+                  "examples": [
+                    { "status_code": 400, "detail": "Bad Request", "extra": {} }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [{ "BearerAuth": [] }]
+      }
+    },
+    "/comments/{parent_comment_id}/reply": {
+      "post": {
+        "tags": ["Comments"],
+        "summary": "ReplyToComment",
+        "operationId": "CommentsParentCommentIdReplyReplyToComment",
+        "parameters": [
+          {
+            "name": "parent_comment_id",
+            "in": "path",
+            "schema": { "type": "string", "format": "uuid" },
+            "required": true,
+            "deprecated": false
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReplyToCommentCommentRequestBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Document created, URL follows",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReplyToCommentCommentResponseBody"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request syntax or unsupported method",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status_code": { "type": "integer" },
+                    "detail": { "type": "string" },
+                    "extra": {
+                      "additionalProperties": {},
+                      "type": ["null", "object", "array"]
+                    }
+                  },
+                  "type": "object",
+                  "required": ["detail", "status_code"],
+                  "description": "Validation Exception",
+                  "examples": [
+                    { "status_code": 400, "detail": "Bad Request", "extra": {} }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [{ "BearerAuth": [] }]
+      }
+    },
+    "/metrics": {
+      "get": {
+        "summary": "Get",
+        "operationId": "MetricsGet",
+        "responses": {
+          "200": {
+            "description": "Request fulfilled, document follows",
+            "headers": {},
+            "content": { "application/json": { "schema": {} } }
+          }
+        },
+        "deprecated": false
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CreateCategoryCategoryRequestBody": {
+        "properties": { "name": { "type": "string" } },
+        "type": "object",
+        "required": ["name"],
+        "title": "CreateCategoryCategoryRequestBody"
+      },
+      "CreateCommentCommentRequestBody": {
+        "properties": { "content": { "type": "string" } },
+        "type": "object",
+        "required": ["content"],
+        "title": "CreateCommentCommentRequestBody"
+      },
+      "CreateCommentCommentResponseBody": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "content": { "type": "string" },
+          "post_id": { "type": "string", "format": "uuid" },
+          "author_id": { "type": "string", "format": "uuid" },
+          "parent_comment_id": {
+            "oneOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ]
+          },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        },
+        "type": "object",
+        "required": ["author_id", "content", "post_id"],
+        "title": "CreateCommentCommentResponseBody"
+      },
+      "CreatePostPostRequestBody": {
+        "properties": {
+          "title": { "type": "string" },
+          "content": { "type": "string" },
+          "categories": {
+            "oneOf": [
+              {
+                "items": { "type": "string", "format": "uuid" },
+                "type": "array"
+              },
+              { "type": "null" }
+            ]
+          }
+        },
+        "type": "object",
+        "required": ["content", "title"],
+        "title": "CreatePostPostRequestBody"
+      },
+      "CreatePostPostResponseBody": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "author_id": { "type": "string", "format": "uuid" },
+          "title": { "type": "string" },
+          "content": { "type": "string" },
+          "categories": {
+            "oneOf": [
+              {
+                "items": { "type": "string", "format": "uuid" },
+                "type": "array"
+              },
+              { "type": "null" }
+            ]
+          },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        },
+        "type": "object",
+        "required": ["author_id", "content", "title"],
+        "title": "CreatePostPostResponseBody"
+      },
+      "GetCommentCommentResponseBody": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "content": { "type": "string" },
+          "post_id": { "type": "string", "format": "uuid" },
+          "author_id": { "type": "string", "format": "uuid" },
+          "parent_comment_id": {
+            "oneOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ]
+          },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        },
+        "type": "object",
+        "required": ["author_id", "content", "post_id"],
+        "title": "GetCommentCommentResponseBody"
+      },
+      "GetCommentsByPostCommentResponseBody": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "content": { "type": "string" },
+          "post_id": { "type": "string", "format": "uuid" },
+          "author_id": { "type": "string", "format": "uuid" },
+          "parent_comment_id": {
+            "oneOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ]
+          },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        },
+        "type": "object",
+        "required": ["author_id", "content", "post_id"],
+        "title": "GetCommentsByPostCommentResponseBody"
+      },
+      "GetFeedPageResponseBody": {
+        "properties": {
+          "items": { "items": { "type": "object" }, "type": "array" },
+          "next_cursor": {
+            "oneOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ]
+          },
+          "has_more": { "type": "boolean" }
+        },
+        "type": "object",
+        "required": ["has_more", "items"],
+        "title": "GetFeedPageResponseBody"
+      },
+      "GetMeUserResponseBody": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "email": { "type": "string" },
+          "login": { "type": "string" },
+          "password": { "type": "string" },
+          "is_admin": { "type": "boolean", "default": false },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "default": "2025-12-28T21:20:41.944706"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "default": "2025-12-28T21:20:41.944714"
+          }
+        },
+        "type": "object",
+        "required": ["email", "login", "password"],
+        "title": "GetMeUserResponseBody"
+      },
+      "GetPersonalizedFeedPageResponseBody": {
+        "properties": {
+          "items": { "items": { "type": "object" }, "type": "array" },
+          "next_cursor": {
+            "oneOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ]
+          },
+          "has_more": { "type": "boolean" }
+        },
+        "type": "object",
+        "required": ["has_more", "items"],
+        "title": "GetPersonalizedFeedPageResponseBody"
+      },
+      "GetPostPostResponseBody": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "author_id": { "type": "string", "format": "uuid" },
+          "title": { "type": "string" },
+          "content": { "type": "string" },
+          "categories": {
+            "oneOf": [
+              {
+                "items": { "type": "string", "format": "uuid" },
+                "type": "array"
+              },
+              { "type": "null" }
+            ]
+          },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        },
+        "type": "object",
+        "required": ["author_id", "content", "title"],
+        "title": "GetPostPostResponseBody"
+      },
+      "GetPostsByAuthorPostResponseBody": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "author_id": { "type": "string", "format": "uuid" },
+          "title": { "type": "string" },
+          "content": { "type": "string" },
+          "categories": {
+            "oneOf": [
+              {
+                "items": { "type": "string", "format": "uuid" },
+                "type": "array"
+              },
+              { "type": "null" }
+            ]
+          },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        },
+        "type": "object",
+        "required": ["author_id", "content", "title"],
+        "title": "GetPostsByAuthorPostResponseBody"
+      },
+      "GetPostsPageResponseBody": {
+        "properties": {
+          "items": { "items": { "type": "object" }, "type": "array" },
+          "next_cursor": {
+            "oneOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ]
+          },
+          "has_more": { "type": "boolean" }
+        },
+        "type": "object",
+        "required": ["has_more", "items"],
+        "title": "GetPostsPageResponseBody"
+      },
+      "GetUserByIdUserResponseBody": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "email": { "type": "string" },
+          "login": { "type": "string" },
+          "password": { "type": "string" },
+          "is_admin": { "type": "boolean", "default": false },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "default": "2025-12-28T21:20:41.944706"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "default": "2025-12-28T21:20:41.944714"
+          }
+        },
+        "type": "object",
+        "required": ["email", "login", "password"],
+        "title": "GetUserByIdUserResponseBody"
+      },
+      "LoginJWTResponseBody": {
+        "properties": {
+          "access": { "type": "string" },
+          "refresh": { "type": "string" }
+        },
+        "type": "object",
+        "required": ["access", "refresh"],
+        "title": "LoginJWTResponseBody"
+      },
+      "LoginUserRequestBody": {
+        "properties": {
+          "email": { "type": "string" },
+          "password": { "type": "string" }
+        },
+        "type": "object",
+        "required": ["email", "password"],
+        "title": "LoginUserRequestBody"
+      },
+      "RefreshJWTResponseBody": {
+        "properties": {
+          "access": { "type": "string" },
+          "refresh": { "type": "string" }
+        },
+        "type": "object",
+        "required": ["access", "refresh"],
+        "title": "RefreshJWTResponseBody"
+      },
+      "RegisterJWTResponseBody": {
+        "properties": {
+          "access": { "type": "string" },
+          "refresh": { "type": "string" }
+        },
+        "type": "object",
+        "required": ["access", "refresh"],
+        "title": "RegisterJWTResponseBody"
+      },
+      "RegisterUserRequestBody": {
+        "properties": {
+          "email": { "type": "string" },
+          "login": { "type": "string" },
+          "password": { "type": "string" }
+        },
+        "type": "object",
+        "required": ["email", "login", "password"],
+        "title": "RegisterUserRequestBody"
+      },
+      "ReplyToCommentCommentRequestBody": {
+        "properties": { "content": { "type": "string" } },
+        "type": "object",
+        "required": ["content"],
+        "title": "ReplyToCommentCommentRequestBody"
+      },
+      "ReplyToCommentCommentResponseBody": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "content": { "type": "string" },
+          "post_id": { "type": "string", "format": "uuid" },
+          "author_id": { "type": "string", "format": "uuid" },
+          "parent_comment_id": {
+            "oneOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ]
+          },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        },
+        "type": "object",
+        "required": ["author_id", "content", "post_id"],
+        "title": "ReplyToCommentCommentResponseBody"
+      },
+      "SearchPostsPostResponseBody": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "author_id": { "type": "string", "format": "uuid" },
+          "title": { "type": "string" },
+          "content": { "type": "string" },
+          "categories": {
+            "oneOf": [
+              {
+                "items": { "type": "string", "format": "uuid" },
+                "type": "array"
+              },
+              { "type": "null" }
+            ]
+          },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        },
+        "type": "object",
+        "required": ["author_id", "content", "title"],
+        "title": "SearchPostsPostResponseBody"
+      },
+      "UpdateCommentCommentRequestBody": {
+        "properties": { "content": { "type": "string" } },
+        "type": "object",
+        "required": ["content"],
+        "title": "UpdateCommentCommentRequestBody"
+      },
+      "UpdateCommentCommentResponseBody": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "content": { "type": "string" },
+          "post_id": { "type": "string", "format": "uuid" },
+          "author_id": { "type": "string", "format": "uuid" },
+          "parent_comment_id": {
+            "oneOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ]
+          },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        },
+        "type": "object",
+        "required": ["author_id", "content", "post_id"],
+        "title": "UpdateCommentCommentResponseBody"
+      },
+      "UpdatePostPostRequestBody": {
+        "properties": {
+          "title": { "type": "string" },
+          "content": { "type": "string" },
+          "categories": {
+            "oneOf": [
+              {
+                "items": { "type": "string", "format": "uuid" },
+                "type": "array"
+              },
+              { "type": "null" }
+            ]
+          }
+        },
+        "type": "object",
+        "required": ["content", "title"],
+        "title": "UpdatePostPostRequestBody"
+      },
+      "UpdatePostPostResponseBody": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "author_id": { "type": "string", "format": "uuid" },
+          "title": { "type": "string" },
+          "content": { "type": "string" },
+          "categories": {
+            "oneOf": [
+              {
+                "items": { "type": "string", "format": "uuid" },
+                "type": "array"
+              },
+              { "type": "null" }
+            ]
+          },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        },
+        "type": "object",
+        "required": ["author_id", "content", "title"],
+        "title": "UpdatePostPostResponseBody"
+      },
+      "UpdateUserUserRequestBody": {
+        "properties": {
+          "email": { "type": "string" },
+          "login": { "type": "string" }
+        },
+        "type": "object",
+        "required": ["email", "login"],
+        "title": "UpdateUserUserRequestBody"
+      },
+      "UpdateUserUserResponseBody": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "email": { "type": "string" },
+          "login": { "type": "string" },
+          "password": { "type": "string" },
+          "is_admin": { "type": "boolean", "default": false },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "default": "2025-12-28T21:20:41.944706"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "default": "2025-12-28T21:20:41.944714"
+          }
+        },
+        "type": "object",
+        "required": ["email", "login", "password"],
+        "title": "UpdateUserUserResponseBody"
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

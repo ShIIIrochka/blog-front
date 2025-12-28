@@ -99,9 +99,6 @@ export function UserProfilePage() {
     }
   };
 
-  const handleLike = async (id: string) => {
-    console.log('Like post:', id);
-  };
 
   const handleSave = async (postId: string) => {
     const isSaved = savedPosts.has(postId);
@@ -198,7 +195,6 @@ export function UserProfilePage() {
                 post={post}
                 author={user}
                 categories={categories}
-                onLike={handleLike}
                 isSaved={savedPosts.has(post.id)}
                 onSave={handleSave}
               />

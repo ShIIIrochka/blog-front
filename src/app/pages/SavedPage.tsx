@@ -61,9 +61,6 @@ export function SavedPage() {
     setAuthors(newAuthors);
   };
 
-  const handleLike = async (id: string) => {
-    console.log('Like post:', id);
-  };
 
   const handleUnsave = async (postId: string) => {
     try {
@@ -100,7 +97,6 @@ export function SavedPage() {
                 post={post}
                 author={authors.get(post.author_id)}
                 categories={categories}
-                onLike={handleLike}
                 isSaved={true}
                 onSave={handleUnsave}
               />

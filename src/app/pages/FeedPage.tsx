@@ -120,10 +120,6 @@ export function FeedPage() {
     }
   };
 
-  const handleLike = async (id: string) => {
-    // Note: Like functionality not available in API
-    console.log('Like post:', id);
-  };
 
   const handleSave = async (postId: string) => {
     const isSaved = savedPosts.has(postId);
@@ -286,7 +282,6 @@ export function FeedPage() {
                 post={post}
                 author={authors.get(post.author_id)}
                 categories={categories}
-                onLike={handleLike}
                 isSaved={savedPosts.has(post.id)}
                 onSave={handleSave}
               />
